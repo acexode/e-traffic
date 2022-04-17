@@ -4,8 +4,13 @@ import { ProfileComponentsComponent } from './../../components/profile-component
 import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { AlertController, LoadingController, ModalController } from '@ionic/angular';
+import {
+  AlertController,
+  LoadingController,
+  ModalController,
+} from '@ionic/angular';
 import { AuthService } from 'src/app/core/service/auth/auth.service';
+import { TranslateConfigService } from 'src/app/translate-config.service';
 
 @Component({
   selector: 'app-profile',
@@ -18,45 +23,47 @@ export class ProfilePage implements OnInit {
   addressForm: FormGroup;
   user;
   showAddressForm = false;
+  selectedLanguage: string;
   items = [
     {
-      title: 'My Traffic Record',
+      title: 'MyTransactions',
       url: '/menu/home/traffic-record',
       icon: 'list',
-      autoNav: false
+      autoNav: false,
     },
     {
-      title: 'Update Contact Details',
+      title: 'contactUpdateLabel',
       url: '/menu/home/updated-contact',
       icon: 'user',
-      autoNav: false
-
+      autoNav: false,
     },
     {
-      title: 'Payment History',
+      title: 'history',
       url: '/menu/home/payment-history',
       icon: 'credit-card',
-      autoNav: false
-
-    }
+      autoNav: false,
+    },
   ];
-  constructor(private fb: FormBuilder,
+  constructor(
+    private fb: FormBuilder,
     private authService: AuthService,
     private alertController: AlertController,
     private router: Router,
+    private translateConfigService: TranslateConfigService,
     private modalController: ModalController,
-    private loadingController: LoadingController) {
-      this.credentials = this.fb.group({
-        fullName: ['', [Validators.required]],
-        email: ['', [Validators.required, Validators.email]],
-        phone: ['', [Validators.required, Validators.minLength(8)]],
-        address: ['', [Validators.required]],
-      });
-
-    }
+    private loadingController: LoadingController
+  ) {
+    this.selectedLanguage = this.translateConfigService.getDefaultLanguage();
+    this.credentials = this.fb.group({
+      fullName: ['', [Validators.required]],
+      email: ['', [Validators.required, Validators.email]],
+      phone: ['', [Validators.required, Validators.minLength(8)]],
+      address: ['', [Validators.required]],
+    });
+  }
 
   ngOnInit() {
-    this.authService.currentUser().subscribe(str =>{
+    this.authService.currentUser().subscribe((str) => {
       const user = JSON.parse(str.value);
       console.log(user);
       this.user = user;
@@ -71,53 +78,57 @@ export class ProfilePage implements OnInit {
   onChange(event) {
     this.file = event.target.files[0];
     this.onUpload();
-}
-async onUpload() {
-  const data = new FormData();
-  data.append('images', this.file);
-  console.log(this.file);
-  const loading = await this.loadingController.create();
+  }
+  languageChanged() {
+    this.translateConfigService.setLanguage(this.selectedLanguage);
+  }
+  async onUpload() {
+    const data = new FormData();
+    data.append('images', this.file);
+    console.log(this.file);
+    const loading = await this.loadingController.create();
     await loading.present();
-  this.authService.uploadProfileImage(data).subscribe(
+    this.authService.uploadProfileImage(data).subscribe(
       async (event: any) => {
         console.log(event);
         const update = {
-          profileImage: event.images
+          profileImage: event.images,
         };
-        this.authService.updateUser(this.user._id, update).subscribe(async e =>{
-         // this.user = e.userInfo;
-          console.log(e);
-          this.authService.currentUser().subscribe(user => {
-            this.user = JSON.parse(user.value);
+        this.authService
+          .updateUser(this.user._id, update)
+          .subscribe(async (e) => {
+            // this.user = e.userInfo;
+            console.log(e);
+            this.authService.currentUser().subscribe((user) => {
+              this.user = JSON.parse(user.value);
+            });
+            //console.log(e?.userInfo);
+            await loading.dismiss();
           });
-          //console.log(e?.userInfo);
-          await loading.dismiss();
-        });
       },
       async (res) => {
         console.log(res);
         await loading.dismiss();
         this.reqFailed(res?.error?.error, 'Request failed');
       }
-  );
-}
-async reqFailed(res, msg){
-  const alert = await this.alertController.create({
-    header: msg,
-    message: res,
-    buttons: ['OK'],
-  });
+    );
+  }
+  async reqFailed(res, msg) {
+    const alert = await this.alertController.create({
+      header: msg,
+      message: res,
+      buttons: ['OK'],
+    });
 
-  await alert.present();
-
-}
+    await alert.present();
+  }
   async presentModal(show) {
     const modal = await this.modalController.create({
       component: ProfileComponentsComponent,
       cssClass: 'fullscreen',
       componentProps: {
-        show
-      }
+        show,
+      },
     });
     await modal.present();
   }
@@ -125,29 +136,29 @@ async reqFailed(res, msg){
     const loading = await this.loadingController.create();
     await loading.present();
 
-    this.authService.updateUser(this.user._id, this.credentials.value).subscribe(
-      async (res) => {
-        await loading.dismiss();
-        this.router.navigate(['menu/home']);
-      },
-      async (res) => {
-        console.log(res);
-        await loading.dismiss();
-        const alert = await this.alertController.create({
-          header: res.error.message,
-          message: res.error.error,
-          buttons: ['OK'],
-        });
+    this.authService
+      .updateUser(this.user._id, this.credentials.value)
+      .subscribe(
+        async (res) => {
+          await loading.dismiss();
+          this.router.navigate(['menu/home']);
+        },
+        async (res) => {
+          console.log(res);
+          await loading.dismiss();
+          const alert = await this.alertController.create({
+            header: res.error.message,
+            message: res.error.error,
+            buttons: ['OK'],
+          });
 
-        await alert.present();
-      }
-    );
+          await alert.present();
+        }
+      );
   }
-  back(){
-
-  }
-  navigate(path){
-    this.router.navigate(['menu/home/'+ path]);
+  back() {}
+  navigate(path) {
+    this.router.navigate(['menu/home/' + path]);
   }
   // Easy access for form fields
   get fullName() {

@@ -1,3 +1,4 @@
+import { TranslateModule } from '@ngx-translate/core';
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
@@ -16,6 +17,7 @@ import { SharedModule } from 'src/app/components/shared/shared.module';
     IonicModule,
     ProfilePageRoutingModule,
     SharedModule,
+    TranslateModule,
     ReactiveFormsModule
   ],
   declarations: [ProfilePage]

@@ -8,6 +8,9 @@ import { IonicModule } from '@ionic/angular';
 import { HeaderComponent } from '../header/header.component';
 import { SwiperModule } from 'swiper/angular';
 import { PasscodeComponent } from '../passcode/passcode.component';
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
+import { HttpClient } from '@angular/common/http';
+import { languageLoader } from 'src/app/LanguageLoader';
 
 @NgModule({
   declarations: [
@@ -23,6 +26,7 @@ import { PasscodeComponent } from '../passcode/passcode.component';
     ReactiveFormsModule,
     IonicModule,
     SwiperModule,
+
   ],
   exports: [
     BannerComponent,

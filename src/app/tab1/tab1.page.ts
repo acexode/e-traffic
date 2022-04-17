@@ -13,18 +13,7 @@ declare const window: any;
 })
 export class Tab1Page implements OnInit {
   showButton = false;
-  brand$: Observable<any>;
-  popular$: Observable<any>;
-  latest$: Observable<any>;
-  blogs$: Observable<any>;
   categories =  [];
-  config: SwiperOptions = {
-    slidesPerView: 3,
-    spaceBetween: 50,
-    navigation: false,
-    pagination: { clickable: true },
-    scrollbar: { draggable: true },
-  };
 
 
 

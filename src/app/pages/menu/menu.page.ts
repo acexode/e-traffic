@@ -20,13 +20,13 @@ export class MenuPage implements OnInit {
 
     },
     {
-      title: 'Update contact details',
+      title: 'contactUpdateLabel',
       url: '/menu/home/categories',
       icon: 'edit-2',
 
     },
     {
-      title: 'Payment history',
+      title: 'history',
       url: '/menu/home/categories',
       icon: 'credit-card',
 
