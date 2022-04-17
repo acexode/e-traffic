@@ -20,15 +20,22 @@ export class ProfilePage implements OnInit {
   showAddressForm = false;
   items = [
     {
-      title: 'My Orders',
-      url: '/menu/home/my-orders',
-      icon: 'shopping-cart',
+      title: 'My Traffic Record',
+      url: '/menu/home/traffic-record',
+      icon: 'list',
       autoNav: false
     },
     {
-      title: 'My Prescription',
-      url: '/menu/home/prescription',
-      icon: 'file-plus',
+      title: 'Update Contact Details',
+      url: '/menu/home/updated-contact',
+      icon: 'user',
+      autoNav: false
+
+    },
+    {
+      title: 'Payment History',
+      url: '/menu/home/payment-history',
+      icon: 'credit-card',
       autoNav: false
 
     }
