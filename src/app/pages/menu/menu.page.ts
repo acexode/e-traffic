@@ -28,7 +28,7 @@ export class MenuPage implements OnInit {
     {
       title: 'Payment history',
       url: '/menu/home/categories',
-      icon: 'file-plus',
+      icon: 'credit-card',
 
     }
   ];
