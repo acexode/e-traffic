@@ -8,6 +8,7 @@ import { IonicModule } from '@ionic/angular';
 import { AboutUsPageRoutingModule } from './about-us-routing.module';
 
 import { AboutUsPage } from './about-us.page';
+import { TranslateModule } from '@ngx-translate/core';
 
 @NgModule({
   imports: [
@@ -15,7 +16,8 @@ import { AboutUsPage } from './about-us.page';
     FormsModule,
     IonicModule,
     AboutUsPageRoutingModule,
-    SharedModule
+    SharedModule,
+    TranslateModule,
   ],
   declarations: [AboutUsPage]
 })
